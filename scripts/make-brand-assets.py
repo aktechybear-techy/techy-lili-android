@@ -6,7 +6,9 @@ Mirrors the iOS fork's scripts/make-brand-assets.py: the same mark (brush hiraga
 (Archivo Black), applied to the surfaces this app ships:
 
 - tv_launcher_icon.png   320x320  TV flavor's full-bleed tile: white て on black.
-- tv_banner_art.png       320x180  Leanback row banner: て accent + TECHYLILI white on near-black.
+- tv_banner_art.png       320x180  Leanback row banner: the て accent mark alone,
+                                    centered on near-black (no wordmark — the app's
+                                    name already sits beside the banner in the row).
 - anilili_launcher.png   1254x1254  Adaptive-icon foreground: て in #8872EF on black,
                                     sized like the upstream あ it replaces.
 - mipmap-*/ic_launcher*.png          Legacy launcher tiles at each density: the original
@@ -111,16 +113,13 @@ def main() -> None:
     tile.save(out)
     print(f"tv_launcher_icon -> {out.relative_to(ROOT)} {tile.size}")
 
-    # ---- leanback banner: て accent + TECHYLILI white on the banner ground
+    # ---- leanback banner: the て mark alone, centered. The wordmark reads as clutter
+    # at TV-row size, and the launcher already prints the app name beside the banner.
     banner = Image.new("RGB", (320, 180), BANNER_BG)
-    g = mark.resize((round(mark.width * 128 / mark.height), 128), RESAMPLE)
+    g = mark.resize((round(mark.width * 140 / mark.height), 140), RESAMPLE)
     gm = Image.new("L", banner.size, 0)
-    gm.paste(g, (44, (180 - g.height) // 2))
+    gm.paste(g, ((320 - g.width) // 2, (180 - g.height) // 2))
     banner.paste(Image.new("RGB", banner.size, ACCENT), (0, 0), gm)
-    w = wm.resize((round(wm.width * 52 / wm.height), 52), RESAMPLE)
-    wm_mask = Image.new("L", banner.size, 0)
-    wm_mask.paste(w, (44 + g.width + 26, (180 - w.height) // 2))
-    banner.paste(Image.new("RGB", banner.size, WHITE), (0, 0), wm_mask)
     out = ROOT / "app/src/main/res/drawable-nodpi/tv_banner_art.png"
     banner.save(out)
     print(f"tv_banner_art    -> {out.relative_to(ROOT)} {banner.size}")
