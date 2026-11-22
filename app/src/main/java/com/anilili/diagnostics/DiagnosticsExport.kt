@@ -33,7 +33,7 @@ import java.io.File
 internal object DiagnosticsExport {
 
     /** Same folder the episode exports use, so a viewer has one place to look. */
-    private const val FOLDER = "Anilili"
+    private const val FOLDER = "TechyLili"
 
     /**
      * Copies [report] into `Downloads/Anilili`, returning a viewer-readable path or null.

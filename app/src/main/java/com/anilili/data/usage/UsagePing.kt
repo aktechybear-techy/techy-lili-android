@@ -87,7 +87,9 @@ object UsagePing {
      * `benchmarkRelease` and `nonMinifiedRelease`, which aren't debuggable and run on the
      * developer's emulators and phones during profiling.
      */
-    private val counted = BuildConfig.BUILD_TYPE == "release"
+    // Fork: a fork does not report usage to the OG's pulse endpoint. False in every build
+    // type, so no counters are scheduled and no ping is ever composed or sent.
+    private val counted = false
 
     private val lenientJson = Json { ignoreUnknownKeys = true }
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)

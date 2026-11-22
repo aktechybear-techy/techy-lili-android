@@ -50,8 +50,9 @@ object AnnouncementSource {
      * slowest. Falling through to the relays is not belt-and-braces — it is the entire point, since
      * an emergency worth announcing may well be the mirror's host going away.
      */
-    fun fetch(client: OkHttpClient, json: Json): Announcement? =
-        fetchFromMirror(client, json) ?: fetchFromRelays(client, json)
+    // Fork: a fork does not read the OG's announcement channels. No mirror fetch and no relay
+    // scan; the announcement center simply never has anything to show.
+    fun fetch(client: OkHttpClient, json: Json): Announcement? = null
 
     private fun fetchFromMirror(client: OkHttpClient, json: Json): Announcement? = runCatching {
         val request = Request.Builder()

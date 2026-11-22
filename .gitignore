@@ -48,3 +48,10 @@ showcase/mobile/*
 !showcase/tv/
 showcase/tv/*
 !showcase/tv/*.webp
+
+# Fork brand-asset generator fonts (SIL OFL, fetched by scripts/make-brand-assets.py)
+scripts/brand-fonts/
+
+# Fork release signing material — never commit
+keystore.properties
+*.keystore

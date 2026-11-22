@@ -173,6 +173,10 @@ object UpdateManager {
     }
 
     fun check(context: Context, manual: Boolean, prompt: Boolean = true) {
+        // Fork: this build never speaks to the OG's update channels — no mirror manifest, no
+        // Nostr relays, no APK download. The Settings row shows what is installed; the manual
+        // button and the periodic auto-check end here.
+        return
         val current = _state.value
         if (current is State.Checking || current is State.Downloading) {
             DiagnosticsLog.event(

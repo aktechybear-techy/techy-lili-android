@@ -136,10 +136,10 @@ object DiagnosticsShareManager {
         )
         val send = Intent(Intent.ACTION_SEND).apply {
             type = "application/zip"
-            putExtra(Intent.EXTRA_SUBJECT, "Anilili diagnostic report")
-            putExtra(Intent.EXTRA_TEXT, "Anilili diagnostic report attached.")
+            putExtra(Intent.EXTRA_SUBJECT, "TechyLili diagnostic report")
+            putExtra(Intent.EXTRA_TEXT, "TechyLili diagnostic report attached.")
             putExtra(Intent.EXTRA_STREAM, uri)
-            clipData = ClipData.newUri(context.contentResolver, "Anilili diagnostics", uri)
+            clipData = ClipData.newUri(context.contentResolver, "TechyLili diagnostics", uri)
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         }
         val chooser = Intent.createChooser(send, "Send diagnostics")

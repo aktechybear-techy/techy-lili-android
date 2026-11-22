@@ -4057,7 +4057,7 @@ private fun AboutSignature() {
             .padding(start = 14.dp, end = 14.dp, top = 22.dp, bottom = 8.dp),
     ) {
         Text(
-            text = "Anilili is a one-person project: an anime app that finds an episode across " +
+            text = "TechyLili is a one-person project: an anime app that finds an episode across " +
                 "dozens of sources, remembers where you stopped, and keeps your list in step with " +
                 "AniList or MyAnimeList. No adverts, and no account of its own.",
             style = MaterialTheme.typography.bodyMedium,
@@ -4074,7 +4074,7 @@ private fun AboutSignature() {
                 modifier = Modifier.size(16.dp),
             )
             Text(
-                text = "Made with love by lili",
+                text = "Made with love by Techy",
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface,
