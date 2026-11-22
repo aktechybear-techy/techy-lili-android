@@ -992,13 +992,6 @@ object SettingsStore {
     private val _searchAsYouType = MutableStateFlow(true)
     val searchAsYouType = _searchAsYouType.asStateFlow()
 
-    /**
-     * TV flavor only: open on the video intro (`res/raw/launch_intro.mp4`, since v0.1.80). Off, the
-     * app opens on the water-fill mark it had before, the one the phone still uses.
-     */
-    private val _videoLaunchIntro = MutableStateFlow(true)
-    val videoLaunchIntro = _videoLaunchIntro.asStateFlow()
-
     /** The phone's launcher icon takes the accent preset's colour ([AppIcon]); off keeps the default. */
     private val _appIconMatchesTheme = MutableStateFlow(true)
     val appIconMatchesTheme = _appIconMatchesTheme.asStateFlow()
@@ -1406,7 +1399,6 @@ object SettingsStore {
         scope.launch { store.edit { prefs -> GLASS_KEYS.values.forEach { prefs[it] = value } } }
     }
     fun setSearchAsYouType(value: Boolean) = save(SEARCH_AS_YOU_TYPE, value, _searchAsYouType)
-    fun setVideoLaunchIntro(value: Boolean) = save(VIDEO_LAUNCH_INTRO, value, _videoLaunchIntro)
     fun setAppIconMatchesTheme(value: Boolean) = save(APP_ICON_MATCHES_THEME, value, _appIconMatchesTheme)
     fun setDiscordRichPresence(value: Boolean) = save(DISCORD_RICH_PRESENCE, value, _discordRichPresence)
 
@@ -2038,7 +2030,6 @@ object SettingsStore {
         _staticAppChrome.value = prefs[STATIC_APP_CHROME] ?: false
         GlassSection.entries.forEach { _glass.getValue(it).value = prefs[GLASS_KEYS.getValue(it)] ?: true }
         _searchAsYouType.value = prefs[SEARCH_AS_YOU_TYPE] ?: true
-        _videoLaunchIntro.value = prefs[VIDEO_LAUNCH_INTRO] ?: true
         _appIconMatchesTheme.value = prefs[APP_ICON_MATCHES_THEME] ?: true
         _discordRichPresence.value = prefs[DISCORD_RICH_PRESENCE] ?: false
         _discordStatus.value = DiscordStatus.fromStored(prefs[DISCORD_STATUS])
@@ -2201,7 +2192,6 @@ object SettingsStore {
     private val STATIC_APP_CHROME = booleanPreferencesKey("static_app_chrome")
     private val GLASS_KEYS = GlassSection.entries.associateWith { booleanPreferencesKey("glass_${it.name.lowercase()}") }
     private val SEARCH_AS_YOU_TYPE = booleanPreferencesKey("search_as_you_type")
-    private val VIDEO_LAUNCH_INTRO = booleanPreferencesKey("video_launch_intro")
     private val APP_ICON_MATCHES_THEME = booleanPreferencesKey("app_icon_matches_theme")
     private val DISCORD_RICH_PRESENCE = booleanPreferencesKey("discord_rich_presence")
     private val DISCORD_STATUS = stringPreferencesKey("discord_status")
@@ -2328,7 +2318,6 @@ object SettingsStore {
         UPDATE_CHECK_ON_LAUNCH,
         STATIC_APP_CHROME,
         SEARCH_AS_YOU_TYPE,
-        VIDEO_LAUNCH_INTRO,
         APP_ICON_MATCHES_THEME,
         PLAYER_ACCENT,
         SHOW_COLOUR_PAGES,

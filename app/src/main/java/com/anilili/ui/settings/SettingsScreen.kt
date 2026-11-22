@@ -409,7 +409,6 @@ fun SettingsScreen(
     val updateCheckOnLaunch by SettingsStore.updateCheckOnLaunch.collectAsState()
     val staticAppChrome by SettingsStore.staticAppChrome.collectAsState()
     val searchAsYouType by SettingsStore.searchAsYouType.collectAsState()
-    val videoLaunchIntro by SettingsStore.videoLaunchIntro.collectAsState()
     val syncSavedToAniList by SettingsStore.syncSavedToAniList.collectAsState()
     val menuLanguage by SettingsStore.menuLanguage.collectAsState()
     val clockFormat by SettingsStore.clockFormat.collectAsState()
@@ -2939,17 +2938,6 @@ fun SettingsScreen(
                         checked = searchAsYouType,
                         onCheckedChange = SettingsStore::setSearchAsYouType,
                     )
-                }
-                // Keyed on the APK like the intro itself: only the TV flavor carries the video.
-                if (BuildConfig.FLAVOR == "tv") {
-                    item(key = "Video intro") {
-                        MidnightSettingSwitchRow(
-                            title = "Video intro",
-                            description = "Off: open on the water-fill logo instead",
-                            checked = videoLaunchIntro,
-                            onCheckedChange = SettingsStore::setVideoLaunchIntro,
-                        )
-                    }
                 }
                 item(key = "Arrange Home") {
                     MidnightSettingRow(

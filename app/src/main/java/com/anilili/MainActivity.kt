@@ -28,7 +28,6 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -90,7 +89,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -196,8 +194,6 @@ import com.anilili.ui.components.AnililiWordmark
 import com.anilili.ui.components.AppChromeTakeover
 import com.anilili.ui.components.LocalAppChromeTakeover
 import com.anilili.ui.components.AppLaunchSplash
-import com.anilili.ui.components.VideoLaunchSplash
-import com.anilili.ui.components.VideoLaunchSplashExitMillis
 import com.anilili.ui.components.FloatingNavBarExpandedHeight
 import com.anilili.ui.components.FloatingNavBarMargin
 import com.anilili.ui.components.FloatingNavItem
@@ -234,7 +230,6 @@ import java.time.LocalTime
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withTimeoutOrNull
 import com.anilili.data.settings.GlassSection
 import com.anilili.ui.components.glassEnabled
 
@@ -349,42 +344,15 @@ class MainActivity : FragmentActivity() {
                             // Over the app, under the intro: keeps Home out of sight between the
                             // intro leaving and "Who's watching?" drawing its own window.
                             com.anilili.ui.profiles.LaunchPickerCover()
-                            // The TV flavor's video intro can be turned off in Settings. Settings load
-                            // asynchronously, so the choice waits for them rather than starting one
-                            // intro and swapping to the other; the mobile flavor has only the mark.
-                            val videoIntro by produceState<Boolean?>(
-                                // A profile switch restarts the app; the viewer has just seen the
-                                // intro and is waiting on their profile, not on a second one.
-                                initialValue = if (BuildConfig.FLAVOR == "tv" && !profileSwitchLaunch) null else false,
-                            ) {
-                                if (value == null) {
-                                    value = withTimeoutOrNull(LaunchIntroSettingsWaitMillis) {
-                                        SettingsStore.awaitLoaded()
-                                        SettingsStore.videoLaunchIntro.value
-                                    } ?: false
-                                }
-                            }
+                            // Fork: the video launch intro is gone — its setting, its player and
+                            // res/raw/launch_intro.mp4 went with the OG's trial. Every flavor and
+                            // every launch opens on the water-fill mark's splash.
                             AnimatedVisibility(
                                 visibleState = launchSplashState,
                                 modifier = Modifier.fillMaxSize(),
-                                // The video intro leaves by pushing through towards the viewer while the
-                                // app shows through it; the mark's splash keeps its short fade.
-                                exit = if (videoIntro == true) {
-                                    fadeOut(tween(VideoLaunchSplashExitMillis, easing = FastOutSlowInEasing)) +
-                                        scaleOut(
-                                            tween(VideoLaunchSplashExitMillis, easing = FastOutSlowInEasing),
-                                            targetScale = 1.15f,
-                                        )
-                                } else {
-                                    fadeOut(tween(LaunchSplashFadeMillis))
-                                },
+                                exit = fadeOut(tween(LaunchSplashFadeMillis)),
                             ) {
-                                when (videoIntro) {
-                                    // The window's own colour, which the mark's splash also opens on.
-                                    null -> Box(Modifier.fillMaxSize().background(ComposeColor(0xFF0B0B0F)))
-                                    true -> VideoLaunchSplash(onFinished = { showLaunchSplash = false })
-                                    false -> AppLaunchSplash(onFinished = { showLaunchSplash = false })
-                                }
+                                AppLaunchSplash(onFinished = { showLaunchSplash = false })
                             }
                         }
                     }
@@ -1192,12 +1160,6 @@ private fun BoxScope.PipeHumanCheckBackdrop(isTv: Boolean, onDismiss: () -> Unit
 }
 
 /** Frames to keep retrying the rail's initial focus on slow TV boxes before giving up. */
-/**
- * How long the TV launch waits for Settings before picking an intro. The read takes milliseconds;
- * past this the water-fill mark plays rather than keeping the screen blank.
- */
-private const val LaunchIntroSettingsWaitMillis = 1_000L
-
 private const val TV_FOCUS_ATTEMPTS = 10
 
 /**

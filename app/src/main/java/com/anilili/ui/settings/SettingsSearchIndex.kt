@@ -204,14 +204,6 @@ internal fun settingsSearchEntries(isTv: Boolean): List<SettingsSearchEntry> = b
                     "keyboard", "lag", "slow", "live", "instant", "firestick", "fire tv",
                 ),
             )
-            if (BuildConfig.FLAVOR == "tv") {
-                add(
-                    "Video intro" to listOf(
-                        "intro", "video", "splash", "launch", "startup", "start up", "opening",
-                        "animation", "logo", "sound", "skip",
-                    ),
-                )
-            }
             add(
                 "Arrange Home" to listOf(
                     "home", "rows", "row", "order", "reorder", "arrange", "layout", "customize",
